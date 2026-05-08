@@ -1,0 +1,14 @@
+.idea/
+__pycache__/
+*.pyc
+*.pyo
+venv*/
+.venv/
+*.bin
+debug.txt
+.pytest_cache/
+THEORY.md
+lab4-task (1).md
+tests
+golden
+
