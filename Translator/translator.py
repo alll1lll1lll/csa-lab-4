@@ -6,6 +6,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from Isa.isa import BinaryManager
 from Translator.assembler import Assembler
+from Translator.preprocessor import Preprocessor
 
 
 def main():
@@ -23,6 +24,8 @@ def main():
         source_code = f.read()
 
     try:
+        source_code = Preprocessor().process(source_code)
+
         asm = Assembler()
         asm.pass_1(source_code)
 

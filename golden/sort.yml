@@ -1,0 +1,453 @@
+source: |
+  .section .data
+  .org 0x10000
+  array:    .word 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+  buf_done: .word 0
+  buf_pos:  .word 0
+  out_buf:  .word 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+  space:    .string " "
+
+  .section .text
+  .org 0x0008
+  .word irq_handler
+
+  .org 0x0100
+  _start:
+  wait_loop:
+      lui t0, 0x0010
+      addi t0, t0, 64
+      lw t1, 0(t0)
+      beq t1, zero, wait_loop
+
+  sort_outer:
+      add t0, zero, zero
+      lui a0, 0x0010
+  sort_inner:
+      lw t1, 0(a0)
+      beq t1, zero, check_swap
+      lw t2, 4(a0)
+      beq t2, zero, check_swap
+      ble t1, t2, no_swap
+      sw t2, 0(a0)
+      sw t1, 4(a0)
+      addi t0, zero, 1
+  no_swap:
+      addi a0, a0, 4
+      beq zero, zero, sort_inner
+  check_swap:
+      bne t0, zero, sort_outer
+
+  print_arr:
+      lui s0, 0x0010
+  print_loop:
+      lw a0, 0(s0)
+      beq a0, zero, end
+      lui a1, 0x0010
+      addi a1, a1, 72
+      jal ra, itoa
+      lui a0, 0x0010
+      addi a0, a0, 72
+      jal ra, print_string
+      lui a0, 0x0010
+      addi a0, a0, 112
+      jal ra, print_string
+      addi s0, s0, 4
+      beq zero, zero, print_loop
+  end:
+      halt
+
+  irq_handler:
+      addi sp, sp, -20
+      sw t0, 16(sp)
+      sw t1, 12(sp)
+      sw t2, 8(sp)
+      sw t3, 4(sp)
+      sw t4, 0(sp)
+
+      lui t0, 0x00FF
+      lw t1, 4(t0)
+      addi t2, zero, 1
+      sw t2, 16(t0)
+
+      beq t1, zero, isr_done
+
+      addi t1, t1, -48
+
+      lui t2, 0x0010
+      addi t2, t2, 68
+      lw t3, 0(t2)
+      lui t4, 0x0010
+      add t4, t4, t3
+      sw t1, 0(t4)
+      addi t3, t3, 4
+      sw t3, 0(t2)
+      beq zero, zero, isr_end
+
+  isr_done:
+      lui t2, 0x0010
+      addi t2, t2, 64
+      addi t3, zero, 1
+      sw t3, 0(t2)
+
+  isr_end:
+      lw t0, 16(sp)
+      lw t1, 12(sp)
+      lw t2, 8(sp)
+      lw t3, 4(sp)
+      lw t4, 0(sp)
+      addi sp, sp, 20
+      iret
+
+  itoa:
+      add t4, zero, a1
+      addi t0, zero, 10
+  itoa_loop:
+      beq a0, zero, itoa_rev
+      div t1, a0, t0
+      mul t2, t1, t0
+      sub t3, a0, t2
+      addi t3, t3, 48
+      sw t3, 0(a1)
+      addi a1, a1, 4
+      add a0, zero, t1
+      beq zero, zero, itoa_loop
+  itoa_rev:
+      sw zero, 0(a1)
+      addi a1, a1, -4
+  rev_loop:
+      bge t4, a1, itoa_end
+      lw t1, 0(t4)
+      lw t2, 0(a1)
+      sw t2, 0(t4)
+      sw t1, 0(a1)
+      addi t4, t4, 4
+      addi a1, a1, -4
+      beq zero, zero, rev_loop
+  itoa_end:
+      jalr zero, ra, 0
+
+  print_string:
+      lui t1, 0x00FF
+  ps_loop:
+      lw t2, 0(a0)
+      beq t2, zero, ps_end
+      sw t2, 8(t1)
+      addi a0, a0, 4
+      beq zero, zero, ps_loop
+  ps_end:
+      jalr zero, ra, 0
+input_schedule:
+- - 50
+  - '5'
+- - 200
+  - '2'
+- - 350
+  - '9'
+- - 500
+  - '1'
+- - 650
+  - '6'
+- - 800
+  - "\0"
+log: |-
+  Tick: 0002 | PC: 0x00000104 | lui r1, 16           | t0: 65536, t1: 0, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 0005 | PC: 0x00000108 | alu_i r1, r1, 64     | t0: 65600, t1: 0, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 0009 | PC: 0x0000010C | load r2, 0(r1)       | t0: 65600, t1: 0, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 0012 | PC: 0x00000100 | branch r2, r0, -12   | t0: 65600, t1: 0, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+  Tick: 0014 | PC: 0x00000104 | lui r1, 16           | t0: 65536, t1: 0, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+  Tick: 0017 | PC: 0x00000108 | alu_i r1, r1, 64     | t0: 65600, t1: 0, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 0021 | PC: 0x0000010C | load r2, 0(r1)       | t0: 65600, t1: 0, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 0024 | PC: 0x00000100 | branch r2, r0, -12   | t0: 65600, t1: 0, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+  Tick: 0026 | PC: 0x00000104 | lui r1, 16           | t0: 65536, t1: 0, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+  Tick: 0029 | PC: 0x00000108 | alu_i r1, r1, 64     | t0: 65600, t1: 0, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 0033 | PC: 0x0000010C | load r2, 0(r1)       | t0: 65600, t1: 0, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 0036 | PC: 0x00000100 | branch r2, r0, -12   | t0: 65600, t1: 0, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+  Tick: 0038 | PC: 0x00000104 | lui r1, 16           | t0: 65536, t1: 0, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+  Tick: 0041 | PC: 0x00000108 | alu_i r1, r1, 64     | t0: 65600, t1: 0, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 0045 | PC: 0x0000010C | load r2, 0(r1)       | t0: 65600, t1: 0, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 0048 | PC: 0x00000100 | branch r2, r0, -12   | t0: 65600, t1: 0, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+  Tick: 0050 | PC: 0x00000104 | lui r1, 16           | t0: 65536, t1: 0, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+  Tick: 0052 | PC: 0x00000180 | --- HARDWARE TRAP --- | t0: 65536, t1: 0, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:0
+  Tick: 0055 | PC: 0x00000184 | alu_i r14, r14, -20  | t0: 65536, t1: 0, sp: 0xEFFEC | N:0 Z:0 V:0 C:0 IE:0
+  Tick: 0058 | PC: 0x00000188 | store r1, 16(r14)    | t0: 65536, t1: 0, sp: 0xEFFEC | N:0 Z:0 V:0 C:0 IE:0
+  Tick: 0061 | PC: 0x0000018C | store r2, 12(r14)    | t0: 65536, t1: 0, sp: 0xEFFEC | N:0 Z:0 V:0 C:0 IE:0
+  Tick: 0064 | PC: 0x00000190 | store r3, 8(r14)     | t0: 65536, t1: 0, sp: 0xEFFEC | N:0 Z:0 V:0 C:0 IE:0
+  Tick: 0067 | PC: 0x00000194 | store r4, 4(r14)     | t0: 65536, t1: 0, sp: 0xEFFEC | N:0 Z:0 V:0 C:0 IE:0
+  Tick: 0070 | PC: 0x00000198 | store r5, 0(r14)     | t0: 65536, t1: 0, sp: 0xEFFEC | N:0 Z:0 V:0 C:0 IE:0
+  Tick: 0072 | PC: 0x0000019C | lui r1, 255          | t0: 1044480, t1: 0, sp: 0xEFFEC | N:0 Z:0 V:0 C:0 IE:0
+  Tick: 0076 | PC: 0x000001A0 | load r2, 4(r1)       | t0: 1044480, t1: 53, sp: 0xEFFEC | N:0 Z:0 V:0 C:0 IE:0
+  Tick: 0079 | PC: 0x000001A4 | alu_i r3, r0, 1      | t0: 1044480, t1: 53, sp: 0xEFFEC | N:0 Z:0 V:0 C:0 IE:0
+  Tick: 0082 | PC: 0x000001A8 | store r3, 16(r1)     | t0: 1044480, t1: 53, sp: 0xEFFEC | N:0 Z:0 V:0 C:0 IE:0
+  Tick: 0085 | PC: 0x000001AC | branch r2, r0, 44    | t0: 1044480, t1: 53, sp: 0xEFFEC | N:0 Z:0 V:0 C:0 IE:0
+  Tick: 0088 | PC: 0x000001B0 | alu_i r2, r2, -48    | t0: 1044480, t1: 5, sp: 0xEFFEC | N:0 Z:0 V:0 C:0 IE:0
+  Tick: 0090 | PC: 0x000001B4 | lui r3, 16           | t0: 1044480, t1: 5, sp: 0xEFFEC | N:0 Z:0 V:0 C:0 IE:0
+  Tick: 0093 | PC: 0x000001B8 | alu_i r3, r3, 68     | t0: 1044480, t1: 5, sp: 0xEFFEC | N:0 Z:0 V:0 C:0 IE:0
+  Tick: 0097 | PC: 0x000001BC | load r4, 0(r3)       | t0: 1044480, t1: 5, sp: 0xEFFEC | N:0 Z:0 V:0 C:0 IE:0
+  Tick: 0099 | PC: 0x000001C0 | lui r5, 16           | t0: 1044480, t1: 5, sp: 0xEFFEC | N:0 Z:0 V:0 C:0 IE:0
+  Tick: 0102 | PC: 0x000001C4 | alu r5, r5, r4       | t0: 1044480, t1: 5, sp: 0xEFFEC | N:0 Z:0 V:0 C:0 IE:0
+  Tick: 0105 | PC: 0x000001C8 | store r2, 0(r5)      | t0: 1044480, t1: 5, sp: 0xEFFEC | N:0 Z:0 V:0 C:0 IE:0
+  Tick: 0108 | PC: 0x000001CC | alu_i r4, r4, 4      | t0: 1044480, t1: 5, sp: 0xEFFEC | N:0 Z:0 V:0 C:0 IE:0
+  Tick: 0111 | PC: 0x000001D0 | store r4, 0(r3)      | t0: 1044480, t1: 5, sp: 0xEFFEC | N:0 Z:0 V:0 C:0 IE:0
+  Tick: 0114 | PC: 0x000001E4 | branch r0, r0, 20    | t0: 1044480, t1: 5, sp: 0xEFFEC | N:0 Z:1 V:0 C:0 IE:0
+  Tick: 0118 | PC: 0x000001E8 | load r1, 16(r14)     | t0: 65536, t1: 5, sp: 0xEFFEC | N:0 Z:1 V:0 C:0 IE:0
+  Tick: 0122 | PC: 0x000001EC | load r2, 12(r14)     | t0: 65536, t1: 0, sp: 0xEFFEC | N:0 Z:1 V:0 C:0 IE:0
+  Tick: 0126 | PC: 0x000001F0 | load r3, 8(r14)      | t0: 65536, t1: 0, sp: 0xEFFEC | N:0 Z:1 V:0 C:0 IE:0
+  Tick: 0130 | PC: 0x000001F4 | load r4, 4(r14)      | t0: 65536, t1: 0, sp: 0xEFFEC | N:0 Z:1 V:0 C:0 IE:0
+  Tick: 0134 | PC: 0x000001F8 | load r5, 0(r14)      | t0: 65536, t1: 0, sp: 0xEFFEC | N:0 Z:1 V:0 C:0 IE:0
+  Tick: 0137 | PC: 0x000001FC | alu_i r14, r14, 20   | t0: 65536, t1: 0, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:0
+  Tick: 0139 | PC: 0x00000104 | iret                 | t0: 65536, t1: 0, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 0142 | PC: 0x00000108 | alu_i r1, r1, 64     | t0: 65600, t1: 0, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 0146 | PC: 0x0000010C | load r2, 0(r1)       | t0: 65600, t1: 0, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 0149 | PC: 0x00000100 | branch r2, r0, -12   | t0: 65600, t1: 0, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+  Tick: 0151 | PC: 0x00000104 | lui r1, 16           | t0: 65536, t1: 0, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+
+  ... [LOG TRUNCATED] ...
+
+  Tick: 1940 | PC: 0x00000154 | lui r7, 16           | t0: 10, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 1943 | PC: 0x00000158 | alu_i r7, r7, 72     | t0: 10, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 1945 | PC: 0x00000200 | jal r15, 168         | t0: 10, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 1948 | PC: 0x00000204 | alu r5, r0, r7       | t0: 10, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 1951 | PC: 0x00000208 | alu_i r1, r0, 10     | t0: 10, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 1954 | PC: 0x0000020C | branch r6, r0, 36    | t0: 10, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 1957 | PC: 0x00000210 | alu r2, r6, r1       | t0: 10, t1: 0, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+  Tick: 1960 | PC: 0x00000214 | alu r3, r2, r1       | t0: 10, t1: 0, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+  Tick: 1963 | PC: 0x00000218 | alu r4, r6, r3       | t0: 10, t1: 0, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 1966 | PC: 0x0000021C | alu_i r4, r4, 48     | t0: 10, t1: 0, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 1969 | PC: 0x00000220 | store r4, 0(r7)      | t0: 10, t1: 0, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 1972 | PC: 0x00000224 | alu_i r7, r7, 4      | t0: 10, t1: 0, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 1975 | PC: 0x00000228 | alu r6, r0, r2       | t0: 10, t1: 0, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+  Tick: 1978 | PC: 0x00000208 | branch r0, r0, -32   | t0: 10, t1: 0, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+  Tick: 1981 | PC: 0x0000022C | branch r6, r0, 36    | t0: 10, t1: 0, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+  Tick: 1984 | PC: 0x00000230 | store r0, 0(r7)      | t0: 10, t1: 0, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+  Tick: 1987 | PC: 0x00000234 | alu_i r7, r7, -4     | t0: 10, t1: 0, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 1990 | PC: 0x00000254 | branch r5, r7, 32    | t0: 10, t1: 0, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+  Tick: 1992 | PC: 0x0000015C | jalr r0, r15, 0      | t0: 10, t1: 0, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+  Tick: 1994 | PC: 0x00000160 | lui r6, 16           | t0: 10, t1: 0, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+  Tick: 1997 | PC: 0x00000164 | alu_i r6, r6, 72     | t0: 10, t1: 0, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 1999 | PC: 0x00000258 | jal r15, 244         | t0: 10, t1: 0, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 2001 | PC: 0x0000025C | lui r2, 255          | t0: 10, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 2005 | PC: 0x00000260 | load r3, 0(r6)       | t0: 10, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 2008 | PC: 0x00000264 | branch r3, r0, 16    | t0: 10, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  OUTPUT: '9'
+  Tick: 2011 | PC: 0x00000268 | store r3, 8(r2)      | t0: 10, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 2014 | PC: 0x0000026C | alu_i r6, r6, 4      | t0: 10, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 2017 | PC: 0x0000025C | branch r0, r0, -16   | t0: 10, t1: 1044480, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+  Tick: 2021 | PC: 0x00000260 | load r3, 0(r6)       | t0: 10, t1: 1044480, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+  Tick: 2024 | PC: 0x00000270 | branch r3, r0, 16    | t0: 10, t1: 1044480, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+  Tick: 2026 | PC: 0x00000168 | jalr r0, r15, 0      | t0: 10, t1: 1044480, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+  Tick: 2028 | PC: 0x0000016C | lui r6, 16           | t0: 10, t1: 1044480, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+  Tick: 2031 | PC: 0x00000170 | alu_i r6, r6, 112    | t0: 10, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 2033 | PC: 0x00000258 | jal r15, 232         | t0: 10, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 2035 | PC: 0x0000025C | lui r2, 255          | t0: 10, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 2039 | PC: 0x00000260 | load r3, 0(r6)       | t0: 10, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 2042 | PC: 0x00000264 | branch r3, r0, 16    | t0: 10, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  OUTPUT: ' '
+  Tick: 2045 | PC: 0x00000268 | store r3, 8(r2)      | t0: 10, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 2048 | PC: 0x0000026C | alu_i r6, r6, 4      | t0: 10, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 2051 | PC: 0x0000025C | branch r0, r0, -16   | t0: 10, t1: 1044480, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+  Tick: 2055 | PC: 0x00000260 | load r3, 0(r6)       | t0: 10, t1: 1044480, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+  Tick: 2058 | PC: 0x00000270 | branch r3, r0, 16    | t0: 10, t1: 1044480, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+  Tick: 2060 | PC: 0x00000174 | jalr r0, r15, 0      | t0: 10, t1: 1044480, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+  Tick: 2063 | PC: 0x00000178 | alu_i r10, r10, 4    | t0: 10, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 2066 | PC: 0x00000148 | branch r0, r0, -48   | t0: 10, t1: 1044480, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+  Tick: 2070 | PC: 0x0000014C | load r6, 0(r10)      | t0: 10, t1: 1044480, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+  Tick: 2073 | PC: 0x0000017C | branch r6, r0, 48    | t0: 10, t1: 1044480, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+  Tick: 2075 | PC: 0x00000180 | halt                 | t0: 10, t1: 1044480, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+output: |
+  --- START SIMULATION ---
+  --- END SIMULATION ---
+  Total ticks: 2075
+  OUTPUT BUFFER:
+  1 2 5 6 9 
+machine_code: |
+  ADDRESS  - HEXCODE  - MNEMONIC
+  --------------------------------
+  00000000 - 00000000 - nop
+  00000004 - 00000000 - nop
+  00000008 - 00000180 - .word 384
+  0000000C - 00000000 - nop
+  00000010 - 00000000 - nop
+  00000014 - 00000000 - nop
+  00000018 - 00000000 - nop
+  0000001C - 00000000 - nop
+  00000020 - 00000000 - nop
+  00000024 - 00000000 - nop
+  00000028 - 00000000 - nop
+  0000002C - 00000000 - nop
+  00000030 - 00000000 - nop
+  00000034 - 00000000 - nop
+  00000038 - 00000000 - nop
+  0000003C - 00000000 - nop
+  00000040 - 00000000 - nop
+  00000044 - 00000000 - nop
+  00000048 - 00000000 - nop
+  0000004C - 00000000 - nop
+  00000050 - 00000000 - nop
+  00000054 - 00000000 - nop
+  00000058 - 00000000 - nop
+  0000005C - 00000000 - nop
+  00000060 - 00000000 - nop
+  00000064 - 00000000 - nop
+  00000068 - 00000000 - nop
+  0000006C - 00000000 - nop
+  00000070 - 00000000 - nop
+  00000074 - 00000000 - nop
+  00000078 - 00000000 - nop
+  0000007C - 00000000 - nop
+  00000080 - 00000000 - nop
+  00000084 - 00000000 - nop
+  00000088 - 00000000 - nop
+  0000008C - 00000000 - nop
+  00000090 - 00000000 - nop
+  00000094 - 00000000 - nop
+  00000098 - 00000000 - nop
+  0000009C - 00000000 - nop
+  000000A0 - 00000000 - nop
+  000000A4 - 00000000 - nop
+  000000A8 - 00000000 - nop
+  000000AC - 00000000 - nop
+  000000B0 - 00000000 - nop
+  000000B4 - 00000000 - nop
+  000000B8 - 00000000 - nop
+  000000BC - 00000000 - nop
+  000000C0 - 00000000 - nop
+  000000C4 - 00000000 - nop
+  000000C8 - 00000000 - nop
+  000000CC - 00000000 - nop
+  000000D0 - 00000000 - nop
+  000000D4 - 00000000 - nop
+  000000D8 - 00000000 - nop
+  000000DC - 00000000 - nop
+  000000E0 - 00000000 - nop
+  000000E4 - 00000000 - nop
+  000000E8 - 00000000 - nop
+  000000EC - 00000000 - nop
+  000000F0 - 00000000 - nop
+  000000F4 - 00000000 - nop
+  000000F8 - 00000000 - nop
+  000000FC - 00000000 - nop
+  00000100 - 14400010 - lui t0, 0x0010
+  00000104 - 04440040 - addi t0, t0, 64
+  00000108 - 08840000 - lw t1, 0(t0)
+  0000010C - 13C807F4 - beq t1, zero, wait_loop
+  00000110 - 00400000 - add t0, zero, zero
+  00000114 - 15800010 - lui a0, 0x0010
+  00000118 - 08980000 - lw t1, 0(a0)
+  0000011C - 10080024 - beq t1, zero, check_swap
+  00000120 - 08D80004 - lw t2, 4(a0)
+  00000124 - 100C001C - beq t2, zero, check_swap
+  00000128 - 1008E010 - ble t1, t2, no_swap
+  0000012C - 0C18C000 - sw t2, 0(a0)
+  00000130 - 0C188004 - sw t1, 4(a0)
+  00000134 - 04400001 - addi t0, zero, 1
+  00000138 - 05980004 - addi a0, a0, 4
+  0000013C - 13C007DC - beq zero, zero, sort_inner
+  00000140 - 13C40FD0 - bne t0, zero, sort_outer
+  00000144 - 16800010 - lui s0, 0x0010
+  00000148 - 09A80000 - lw a0, 0(s0)
+  0000014C - 10180030 - beq a0, zero, end
+  00000150 - 15C00010 - lui a1, 0x0010
+  00000154 - 05DC0048 - addi a1, a1, 72
+  00000158 - 1BC000A8 - jal ra, itoa
+  0000015C - 15800010 - lui a0, 0x0010
+  00000160 - 05980048 - addi a0, a0, 72
+  00000164 - 1BC000F4 - jal ra, print_string
+  00000168 - 15800010 - lui a0, 0x0010
+  0000016C - 05980070 - addi a0, a0, 112
+  00000170 - 1BC000E8 - jal ra, print_string
+  00000174 - 06A80004 - addi s0, s0, 4
+  00000178 - 13C007D0 - beq zero, zero, print_loop
+  0000017C - 20010000 - halt
+  00000180 - 07B87FEC - addi sp, sp, -20
+  00000184 - 0C384010 - sw t0, 16(sp)
+  00000188 - 0C38800C - sw t1, 12(sp)
+  0000018C - 0C38C008 - sw t2, 8(sp)
+  00000190 - 0C390004 - sw t3, 4(sp)
+  00000194 - 0C394000 - sw t4, 0(sp)
+  00000198 - 144000FF - lui t0, 0x00FF
+  0000019C - 08840004 - lw t1, 4(t0)
+  000001A0 - 04C00001 - addi t2, zero, 1
+  000001A4 - 0C04C010 - sw t2, 16(t0)
+  000001A8 - 1008002C - beq t1, zero, isr_done
+  000001AC - 04887FD0 - addi t1, t1, -48
+  000001B0 - 14C00010 - lui t2, 0x0010
+  000001B4 - 04CC0044 - addi t2, t2, 68
+  000001B8 - 090C0000 - lw t3, 0(t2)
+  000001BC - 15400010 - lui t4, 0x0010
+  000001C0 - 01550000 - add t4, t4, t3
+  000001C4 - 0C148000 - sw t1, 0(t4)
+  000001C8 - 05100004 - addi t3, t3, 4
+  000001CC - 0C0D0000 - sw t3, 0(t2)
+  000001D0 - 10000014 - beq zero, zero, isr_end
+  000001D4 - 14C00010 - lui t2, 0x0010
+  000001D8 - 04CC0040 - addi t2, t2, 64
+  000001DC - 05000001 - addi t3, zero, 1
+  000001E0 - 0C0D0000 - sw t3, 0(t2)
+  000001E4 - 08780010 - lw t0, 16(sp)
+  000001E8 - 08B8000C - lw t1, 12(sp)
+  000001EC - 08F80008 - lw t2, 8(sp)
+  000001F0 - 09380004 - lw t3, 4(sp)
+  000001F4 - 09780000 - lw t4, 0(sp)
+  000001F8 - 07B80014 - addi sp, sp, 20
+  000001FC - 20008000 - iret
+  00000200 - 0141C000 - add t4, zero, a1
+  00000204 - 0440000A - addi t0, zero, 10
+  00000208 - 10180024 - beq a0, zero, itoa_rev
+  0000020C - 00985800 - div t1, a0, t0
+  00000210 - 00C85000 - mul t2, t1, t0
+  00000214 - 0118C800 - sub t3, a0, t2
+  00000218 - 05100030 - addi t3, t3, 48
+  0000021C - 0C1D0000 - sw t3, 0(a1)
+  00000220 - 05DC0004 - addi a1, a1, 4
+  00000224 - 01808000 - add a0, zero, t1
+  00000228 - 13C007E0 - beq zero, zero, itoa_loop
+  0000022C - 0C1C0000 - sw zero, 0(a1)
+  00000230 - 05DC7FFC - addi a1, a1, -4
+  00000234 - 1015D820 - bge t4, a1, itoa_end
+  00000238 - 08940000 - lw t1, 0(t4)
+  0000023C - 08DC0000 - lw t2, 0(a1)
+  00000240 - 0C14C000 - sw t2, 0(t4)
+  00000244 - 0C1C8000 - sw t1, 0(a1)
+  00000248 - 05540004 - addi t4, t4, 4
+  0000024C - 05DC7FFC - addi a1, a1, -4
+  00000250 - 13C007E4 - beq zero, zero, rev_loop
+  00000254 - 1C3C0000 - jalr zero, ra, 0
+  00000258 - 148000FF - lui t1, 0x00FF
+  0000025C - 08D80000 - lw t2, 0(a0)
+  00000260 - 100C0010 - beq t2, zero, ps_end
+  00000264 - 0C08C008 - sw t2, 8(t1)
+  00000268 - 05980004 - addi a0, a0, 4
+  0000026C - 13C007F0 - beq zero, zero, ps_loop
+  00000270 - 1C3C0000 - jalr zero, ra, 0
+
+  DATA SECTION
+  00010000 - 00000000 - .word 0
+  00010004 - 00000000 - .word 0
+  00010008 - 00000000 - .word 0
+  0001000C - 00000000 - .word 0
+  00010010 - 00000000 - .word 0
+  00010014 - 00000000 - .word 0
+  00010018 - 00000000 - .word 0
+  0001001C - 00000000 - .word 0
+  00010020 - 00000000 - .word 0
+  00010024 - 00000000 - .word 0
+  00010028 - 00000000 - .word 0
+  0001002C - 00000000 - .word 0
+  00010030 - 00000000 - .word 0
+  00010034 - 00000000 - .word 0
+  00010038 - 00000000 - .word 0
+  0001003C - 00000000 - .word 0
+  00010040 - 00000000 - .word 0
+  00010044 - 00000000 - .word 0
+  00010048 - 00000000 - .word 0
+  0001004C - 00000000 - .word 0
+  00010050 - 00000000 - .word 0
+  00010054 - 00000000 - .word 0
+  00010058 - 00000000 - .word 0
+  0001005C - 00000000 - .word 0
+  00010060 - 00000000 - .word 0
+  00010064 - 00000000 - .word 0
+  00010068 - 00000000 - .word 0
+  0001006C - 00000000 - .word 0
+  00010070 - 00000020 - .string ' '
+  00010074 - 00000000 - .string '\0'

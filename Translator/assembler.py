@@ -88,11 +88,11 @@ class Assembler:
                 target_addr = parse_int(line.split()[1])
                 if section == '.text':
                     while self.pc < target_addr:
-                        self.text_section.append((self.pc, 0, "nop ; .org padding"))
+                        self.text_section.append((self.pc, 0, "nop"))
                         self.pc += 4
                 elif section == '.data':
                     while self.dc < target_addr:
-                        self.data_section.append((self.dc, 0, "0 ; .org padding"))
+                        self.data_section.append((self.dc, 0, "0"))
                         self.dc += 4
                 continue
 

@@ -1,4 +1,5 @@
 import logging
+from collections import deque
 
 MMIO_BASE       = 0x000FF000
 MMIO_IN_STATUS  = MMIO_BASE + 0x00
@@ -11,18 +12,21 @@ MMIO_IRQ_ACK    = MMIO_BASE + 0x10
 class Memory:
     def __init__(self):
         self.memory = {}
-        self.mmio_in_data = 0
-        self.mmio_in_status = 0
+        self.input_queue = deque()
         self.irq_pending = False
+        self.eof = False
         self.output_buffer = []
 
     def read(self, address):
         if address % 4 != 0:
             raise ValueError(f"Unaligned memory read at 0x{address:08X}")
         if address == MMIO_IN_STATUS:
-            return self.mmio_in_status
+            return 1 if self.input_queue else 0
         if address == MMIO_IN_DATA:
-            return self.mmio_in_data
+            if self.input_queue:
+                return self.input_queue[0]
+            self.eof = True
+            return 0
         if address == MMIO_OUT_STATUS:
             return 1
         return self.memory.get(address, 0)
@@ -36,8 +40,8 @@ class Memory:
             logging.info(f"OUTPUT: '{char}'")
             return
         if address == MMIO_IRQ_ACK:
-            if value != 0:
-                self.irq_pending = False
-                self.mmio_in_status = 0
+            if value != 0 and self.input_queue:
+                self.input_queue.popleft()
+                self.irq_pending = bool(self.input_queue)
             return
         self.memory[address] = value & 0xFFFFFFFF

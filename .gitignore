@@ -1,3 +1,4 @@
+.claude/
 .idea/
 __pycache__/
 *.pyc
@@ -7,8 +8,6 @@ venv*/
 *.bin
 debug.txt
 .pytest_cache/
-THEORY.md
 lab4-task (1).md
-tests
-golden
+THEORY.md
 
