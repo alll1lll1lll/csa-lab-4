@@ -19,6 +19,20 @@ class Assembler:
         self.lines_info = []
 
     def resolve_imm(self, imm_str: str, current_pc: int, is_relative: bool = False) -> int:
+        # %hi(sym) → upper bits of address (sym >> 12)
+        m = re.match(r'%hi\((\w+)\)$', imm_str)
+        if m:
+            sym = m.group(1)
+            addr = self.labels[sym] if sym in self.labels else parse_int(sym)
+            return (addr >> 12) & 0x1FFFFF
+
+        # %lo(sym) → lower 12 bits of address
+        m = re.match(r'%lo\((\w+)\)$', imm_str)
+        if m:
+            sym = m.group(1)
+            addr = self.labels[sym] if sym in self.labels else parse_int(sym)
+            return addr & 0xFFF
+
         if imm_str in self.labels:
             target = self.labels[imm_str]
             return (target - current_pc) if is_relative else target

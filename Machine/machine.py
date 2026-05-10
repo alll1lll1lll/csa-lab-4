@@ -55,6 +55,7 @@ def main():
     cu.run(schedule)
     print("--- END SIMULATION ---")
     print(f"Total ticks: {cu.ticks}")
+    print(dp.cache.stats())
 
     output_str = "".join(mem.output_buffer)
     print(f"OUTPUT BUFFER:\n{output_str}")

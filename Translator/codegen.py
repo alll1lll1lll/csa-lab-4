@@ -2,69 +2,144 @@ import re
 
 from Isa.isa import REGISTERS, InstructionEncoder, Opcode
 
+# R-type funct3 / funct7 tables
+_R_F3 = {
+    'add': 0, 'sub': 1,
+    'mul': 2, 'mulh': 2,
+    'div': 3, 'rem': 3,
+    'and': 4, 'or': 5, 'xor': 6,
+    'sll': 7, 'srl': 7, 'sra': 7,
+}
+_R_F7 = {
+    'add': 0, 'sub': 0,
+    'mul': 0, 'mulh': 1,
+    'div': 0, 'rem': 1,
+    'and': 0, 'or': 0, 'xor': 0,
+    'sll': 1, 'srl': 3, 'sra': 4,
+}
+
+# I-type ALU funct3 table
+_I_ALU_F3 = {
+    'addi': 0,
+    'slli': 1,
+    'slti': 2,
+    'srli': 3,
+    'andi': 4,
+    'ori':  5,
+    'xori': 6,
+    'srai': 7,
+}
+
+# Branch funct3 table
+_B_F3 = {
+    'beq': 0, 'bne': 1, 'blt': 2, 'bge': 3,
+    'ble': 4, 'bgt': 5, 'blo': 6, 'bgeu': 7,
+}
+
 
 class CodeGenerator:
 
     @staticmethod
     def encode_instruction(mnemonic: str, args: list, pc: int, resolve_imm_func) -> int:
         try:
-            if mnemonic in ['add', 'sub', 'mul', 'div', 'and', 'or', 'xor', 'cmp', 'sll', 'sla', 'srl', 'sra']:
+            if mnemonic in _R_F3:
                 rd, rs1, rs2 = REGISTERS[args[0]], REGISTERS[args[1]], REGISTERS[args[2]]
-                f3_map = {
-                    'add': 0, 'sub': 1, 'mul': 2, 'div': 3,
-                    'and': 4, 'or': 5,  'xor': 6,
-                    'cmp': 7, 'sll': 7, 'sla': 7, 'srl': 7, 'sra': 7,
-                }
-                f7_map = {
-                    'add': 0, 'sub': 0, 'mul': 0, 'div': 0,
-                    'and': 0, 'or': 0,  'xor': 0,
-                    'cmp': 0, 'sll': 1, 'sla': 2, 'srl': 3, 'sra': 4,
-                }
-                return InstructionEncoder.encode_r(Opcode.OP_R, rd, rs1, rs2, f3_map[mnemonic], f7_map[mnemonic])
+                return InstructionEncoder.encode_r(
+                    Opcode.OP_R, rd, rs1, rs2,
+                    _R_F3[mnemonic], _R_F7[mnemonic]
+                )
 
-            elif mnemonic in ['addi', 'andi', 'ori']:
+            elif mnemonic == 'cmp':
+                rs1, rs2 = REGISTERS[args[0]], REGISTERS[args[1]]
+                return InstructionEncoder.encode_r(Opcode.OP_R, 0, rs1, rs2, 7, 0)
+
+            elif mnemonic in _I_ALU_F3:
                 rd, rs1 = REGISTERS[args[0]], REGISTERS[args[1]]
                 imm = resolve_imm_func(args[2], pc)
-                f3_map = {'addi': 0, 'andi': 4, 'ori': 5}
-                return InstructionEncoder.encode_i(Opcode.OP_I_ALU, rd, rs1, imm, f3_map[mnemonic])
+                return InstructionEncoder.encode_i(
+                    Opcode.OP_I_ALU, rd, rs1, imm, _I_ALU_F3[mnemonic]
+                )
 
-            elif mnemonic in ['lw', 'lb', 'sw', 'sb']:
+            elif mnemonic in ('lw', 'lb', 'sw', 'sb'):
                 reg = REGISTERS[args[0]]
-                match = re.match(r'(-?\w+)\(([a-zA-Z0-9]+)\)', args[1])
-                if not match:
-                    raise ValueError(f"Invalid memory addressing format: {args[1]}")
+                m = re.match(r'(-?\w+)\((\w+)\)', args[1])
+                if not m:
+                    raise ValueError(f"Bad memory addressing: {args[1]}")
+                imm = resolve_imm_func(m.group(1), pc)
+                base = REGISTERS[m.group(2)]
 
-                imm = resolve_imm_func(match.group(1), pc)
-                base_reg = REGISTERS[match.group(2)]
-
-                if mnemonic in ['lw', 'lb']:
-                    funct3 = 0 if mnemonic == 'lw' else 1
-                    return InstructionEncoder.encode_i(Opcode.OP_I_LOAD, reg, base_reg, imm, funct3)
+                if mnemonic in ('lw', 'lb'):
+                    f3 = 0 if mnemonic == 'lw' else 1
+                    return InstructionEncoder.encode_i(Opcode.OP_I_LOAD, reg, base, imm, f3)
                 else:
-                    funct3 = 0 if mnemonic == 'sw' else 1
-                    return InstructionEncoder.encode_s(Opcode.OP_S_STORE, base_reg, reg, imm, funct3)
+                    f3 = 0 if mnemonic == 'sw' else 1
+                    return InstructionEncoder.encode_s(Opcode.OP_S_STORE, base, reg, imm, f3)
 
-            elif mnemonic in ['beq', 'bne', 'blt', 'bge', 'ble', 'bgt', 'blo', 'bgeu']:
+            elif mnemonic in _B_F3:
                 rs1, rs2 = REGISTERS[args[0]], REGISTERS[args[1]]
                 imm = resolve_imm_func(args[2], pc, is_relative=True)
-                f3_map = {'beq': 0, 'bne': 1, 'blt': 2, 'bge': 3, 'ble': 4, 'bgt': 5, 'blo': 6, 'bgeu': 7}
-                return InstructionEncoder.encode_s(Opcode.OP_B_BRANCH, rs1, rs2, imm, f3_map[mnemonic])
+                return InstructionEncoder.encode_s(
+                    Opcode.OP_B_BRANCH, rs1, rs2, imm, _B_F3[mnemonic]
+                )
 
             elif mnemonic == 'jal':
+                rd = REGISTERS[args[0]]
                 imm = resolve_imm_func(args[1], pc, is_relative=True)
-                return InstructionEncoder.encode_u(Opcode.OP_J_JAL, REGISTERS[args[0]], imm)
+                return InstructionEncoder.encode_u(Opcode.OP_J_JAL, rd, imm)
 
             elif mnemonic == 'jalr':
+                rd, rs1 = REGISTERS[args[0]], REGISTERS[args[1]]
                 imm = resolve_imm_func(args[2], pc)
-                return InstructionEncoder.encode_i(Opcode.OP_I_JALR, REGISTERS[args[0]], REGISTERS[args[1]], imm, 0)
-
-            elif mnemonic in ['trap', 'iret', 'halt']:
-                f3_map = {'trap': 0, 'iret': 1, 'halt': 2}
-                return InstructionEncoder.encode_i(Opcode.OP_SYS, 0, 0, 0, f3_map[mnemonic])
+                return InstructionEncoder.encode_i(Opcode.OP_I_JALR, rd, rs1, imm, 0)
 
             elif mnemonic == 'lui':
+                rd = REGISTERS[args[0]]
                 imm = resolve_imm_func(args[1], pc)
-                return InstructionEncoder.encode_u(Opcode.OP_U_LUI, REGISTERS[args[0]], imm)
+                return InstructionEncoder.encode_u(Opcode.OP_U_LUI, rd, imm)
+
+            elif mnemonic in ('trap', 'iret', 'halt'):
+                f3 = {'trap': 0, 'iret': 1, 'halt': 2}[mnemonic]
+                return InstructionEncoder.encode_i(Opcode.OP_SYS, 0, 0, 0, f3)
+
+            elif mnemonic == 'mv':
+                # mv rd, rs  →  addi rd, rs, 0
+                rd, rs1 = REGISTERS[args[0]], REGISTERS[args[1]]
+                return InstructionEncoder.encode_i(Opcode.OP_I_ALU, rd, rs1, 0, 0)
+
+            elif mnemonic == 'j':
+                # j label  →  jal zero, label
+                imm = resolve_imm_func(args[0], pc, is_relative=True)
+                return InstructionEncoder.encode_u(Opcode.OP_J_JAL, 0, imm)
+
+            elif mnemonic == 'jr':
+                # jr rs  →  jalr zero, rs, 0
+                rs = REGISTERS[args[0]]
+                return InstructionEncoder.encode_i(Opcode.OP_I_JALR, 0, rs, 0, 0)
+
+            elif mnemonic == 'beqz':
+                # beqz rs, label  →  beq rs, zero, label
+                rs1 = REGISTERS[args[0]]
+                imm = resolve_imm_func(args[1], pc, is_relative=True)
+                return InstructionEncoder.encode_s(Opcode.OP_B_BRANCH, rs1, 0, imm, 0)
+
+            elif mnemonic == 'bnez':
+                # bnez rs, label  →  bne rs, zero, label
+                rs1 = REGISTERS[args[0]]
+                imm = resolve_imm_func(args[1], pc, is_relative=True)
+                return InstructionEncoder.encode_s(Opcode.OP_B_BRANCH, rs1, 0, imm, 1)
+
+            elif mnemonic == 'bgtu':
+                # bgtu rs1, rs2, label  →  blo rs2, rs1, label  (swap operands)
+                rs1, rs2 = REGISTERS[args[0]], REGISTERS[args[1]]
+                imm = resolve_imm_func(args[2], pc, is_relative=True)
+                return InstructionEncoder.encode_s(Opcode.OP_B_BRANCH, rs2, rs1, imm, 6)
+
+            elif mnemonic == 'bleu':
+                # bleu rs1, rs2, label  →  bgeu rs2, rs1, label  (swap operands)
+                rs1, rs2 = REGISTERS[args[0]], REGISTERS[args[1]]
+                imm = resolve_imm_func(args[2], pc, is_relative=True)
+                return InstructionEncoder.encode_s(Opcode.OP_B_BRANCH, rs2, rs1, imm, 7)
+
             else:
                 raise ValueError(f"Unknown instruction: {mnemonic}")
 

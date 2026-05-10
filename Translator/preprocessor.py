@@ -103,16 +103,18 @@ class Preprocessor:
 
         return output
 
-    # Pass B: expand macro invocations
+    # Pass B: expand macro invocations and apply .define substitutions
     def _expand(self, lines: list[str]) -> list[str]:
-        if not self.macros:
-            return lines
-
         output: list[str] = []
         for line in lines:
-            code = line.split(';')[0].strip()
+            # Apply .define substitutions (whole-word replacement, outside strings)
+            expanded_line = line
+            for name, value in self.defines.items():
+                expanded_line = re.sub(r'\b' + re.escape(name) + r'\b', value, expanded_line)
+
+            code = expanded_line.split(';')[0].strip()
             if not code:
-                output.append(line)
+                output.append(expanded_line)
                 continue
 
             tokens = re.split(r'[\s,]+', code)
@@ -121,11 +123,11 @@ class Preprocessor:
                 params, body = self.macros[mnemonic]
                 call_args = [t for t in tokens[1:] if t]
                 for body_line in body:
-                    expanded = body_line
+                    substituted = body_line
                     for param, arg in zip(params, call_args):
-                        expanded = re.sub(r'\\' + re.escape(param), arg, expanded)
-                    output.append(expanded)
+                        substituted = re.sub(r'\\' + re.escape(param), arg, substituted)
+                    output.append(substituted)
             else:
-                output.append(line)
+                output.append(expanded_line)
 
         return output

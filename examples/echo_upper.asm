@@ -1,30 +1,26 @@
 .section .data
 .org 0x10000
-done:   .word 0         ; set to 1 by ISR when '\0' received
+done:   .word 0
 
 .section .text
 
-; Interrupt vector table
 .org 0x0000
-.word 0                 ; 0x0000 - unused
-.word 0                 ; 0x0004 - software trap vector (unused)
-.word hw_isr            ; 0x0008 - hardware interrupt vector
+.word 0
+.word 0
+.word hw_isr
 
 .org 0x0100
 _start:
-    lui s0, 0x10        ; s0 = 0x10000 (done flag address)
+    lui s0, 0x10
 
 main_loop:
-    lw t0, 0(s0)        ; check done flag
+    lw t0, 0(s0)
     bne t0, zero, halt_prog
     beq zero, zero, main_loop
 
 halt_prog:
     halt
 
-; Hardware interrupt service routine
-; Reads one char from MMIO_IN_DATA, converts a-z → A-Z, outputs it.
-; On '\0': sets done flag and returns.
 hw_isr:
     addi sp, sp, -16
     sw t0, 12(sp)
@@ -32,23 +28,22 @@ hw_isr:
     sw t2, 4(sp)
     sw s0, 0(sp)
 
-    lui t0, 0xFF        ; t0 = 0xFF000 (MMIO base)
-    lw t1, 4(t0)        ; peek MMIO_IN_DATA
+    lui t0, 0xFF
+    lw t1, 4(t0)
 
     addi t2, zero, 1
-    sw t2, 16(t0)       ; MMIO_IRQ_ACK — pop from queue
+    sw t2, 16(t0)
 
     beq t1, zero, set_done
 
-    ; Convert lowercase to uppercase if 'a' <= t1 <= 'z'
-    addi t2, zero, 97   ; 'a'
+    addi t2, zero, 97
     blt t1, t2, do_output
-    addi t2, zero, 122  ; 'z'
+    addi t2, zero, 122
     bgt t1, t2, do_output
-    addi t1, t1, -32    ; to uppercase
+    addi t1, t1, -32
 
 do_output:
-    sw t1, 8(t0)        ; MMIO_OUT_DATA
+    sw t1, 8(t0)
 
 isr_return:
     lw s0, 0(sp)
@@ -59,7 +54,7 @@ isr_return:
     iret
 
 set_done:
-    lui s0, 0x10        ; s0 = 0x10000 (done flag)
+    lui s0, 0x10
     addi t1, zero, 1
-    sw t1, 0(s0)        ; done = 1
+    sw t1, 0(s0)
     beq zero, zero, isr_return

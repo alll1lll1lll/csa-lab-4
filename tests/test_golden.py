@@ -17,7 +17,6 @@ logging.getLogger().setLevel(logging.INFO)
 
 
 def truncate_log(log_text: str, max_lines: int = 100) -> str:
-    """Обрезает лог, если он слишком длинный, оставляя начало и конец."""
     lines = log_text.strip().split('\n')
     if len(lines) <= max_lines:
         return log_text

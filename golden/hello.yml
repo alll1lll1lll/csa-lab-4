@@ -18,88 +18,114 @@ source: |
       halt
 input_schedule: []
 log: |-
-  Tick: 0002 | PC: 0x00000104 | lui r6, 16           | t0: 0, t1: 0, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
-  Tick: 0004 | PC: 0x00000108 | lui r2, 255          | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
-  Tick: 0008 | PC: 0x0000010C | load r3, 0(r6)       | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
-  Tick: 0011 | PC: 0x00000110 | branch r3, r0, 16    | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  CACHE MISS 0x00000100
+  Tick: 0011 | PC: 0x00000104 | lui r10, 16          | t0: 0, t1: 0, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  CACHE MISS 0x00000104
+  Tick: 0022 | PC: 0x00000108 | lui r6, 255          | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  CACHE MISS 0x00000108
+  CACHE MISS 0x00010000
+  Tick: 0044 | PC: 0x0000010C | load r7, 0(r10)      | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  CACHE MISS 0x0000010C
+  Tick: 0056 | PC: 0x00000110 | branch r7, r0, 16    | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  CACHE MISS 0x00000110
   OUTPUT: 'h'
-  Tick: 0014 | PC: 0x00000114 | store r3, 8(r2)      | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
-  Tick: 0017 | PC: 0x00000118 | alu_i r6, r6, 4      | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
-  Tick: 0020 | PC: 0x00000108 | branch r0, r0, -16   | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
-  Tick: 0024 | PC: 0x0000010C | load r3, 0(r6)       | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
-  Tick: 0027 | PC: 0x00000110 | branch r3, r0, 16    | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 0068 | PC: 0x00000114 | store r7, 8(r6)      | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  CACHE MISS 0x00000114
+  Tick: 0080 | PC: 0x00000118 | alu_i r10, r10, 4    | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  CACHE MISS 0x00000118
+  Tick: 0092 | PC: 0x00000108 | branch r0, r0, -16   | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+  CACHE HIT  0x00000108
+  CACHE MISS 0x00010004
+  Tick: 0105 | PC: 0x0000010C | load r7, 0(r10)      | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+  CACHE HIT  0x0000010C
+  Tick: 0108 | PC: 0x00000110 | branch r7, r0, 16    | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  CACHE HIT  0x00000110
   OUTPUT: 'e'
-  Tick: 0030 | PC: 0x00000114 | store r3, 8(r2)      | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
-  Tick: 0033 | PC: 0x00000118 | alu_i r6, r6, 4      | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
-  Tick: 0036 | PC: 0x00000108 | branch r0, r0, -16   | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
-  Tick: 0040 | PC: 0x0000010C | load r3, 0(r6)       | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
-  Tick: 0043 | PC: 0x00000110 | branch r3, r0, 16    | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 0111 | PC: 0x00000114 | store r7, 8(r6)      | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  CACHE HIT  0x00000114
+  Tick: 0114 | PC: 0x00000118 | alu_i r10, r10, 4    | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  CACHE HIT  0x00000118
+  Tick: 0117 | PC: 0x00000108 | branch r0, r0, -16   | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+  CACHE HIT  0x00000108
+  CACHE MISS 0x00010008
+  Tick: 0130 | PC: 0x0000010C | load r7, 0(r10)      | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+  CACHE HIT  0x0000010C
+  Tick: 0133 | PC: 0x00000110 | branch r7, r0, 16    | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  CACHE HIT  0x00000110
   OUTPUT: 'l'
-  Tick: 0046 | PC: 0x00000114 | store r3, 8(r2)      | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
-  Tick: 0049 | PC: 0x00000118 | alu_i r6, r6, 4      | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
-  Tick: 0052 | PC: 0x00000108 | branch r0, r0, -16   | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
-  Tick: 0056 | PC: 0x0000010C | load r3, 0(r6)       | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
-  Tick: 0059 | PC: 0x00000110 | branch r3, r0, 16    | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 0136 | PC: 0x00000114 | store r7, 8(r6)      | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  CACHE HIT  0x00000114
+  Tick: 0139 | PC: 0x00000118 | alu_i r10, r10, 4    | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  CACHE HIT  0x00000118
+  Tick: 0142 | PC: 0x00000108 | branch r0, r0, -16   | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+  CACHE MISS 0x00000108
+  CACHE MISS 0x0001000C
+  Tick: 0164 | PC: 0x0000010C | load r7, 0(r10)      | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+  CACHE MISS 0x0000010C
+  Tick: 0176 | PC: 0x00000110 | branch r7, r0, 16    | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  CACHE HIT  0x00000110
   OUTPUT: 'l'
-  Tick: 0062 | PC: 0x00000114 | store r3, 8(r2)      | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
-  Tick: 0065 | PC: 0x00000118 | alu_i r6, r6, 4      | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
-  Tick: 0068 | PC: 0x00000108 | branch r0, r0, -16   | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
-  Tick: 0072 | PC: 0x0000010C | load r3, 0(r6)       | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
-  Tick: 0075 | PC: 0x00000110 | branch r3, r0, 16    | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
-  OUTPUT: 'o'
-  Tick: 0078 | PC: 0x00000114 | store r3, 8(r2)      | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
-  Tick: 0081 | PC: 0x00000118 | alu_i r6, r6, 4      | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
-  Tick: 0084 | PC: 0x00000108 | branch r0, r0, -16   | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
-  Tick: 0088 | PC: 0x0000010C | load r3, 0(r6)       | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
-  Tick: 0091 | PC: 0x00000110 | branch r3, r0, 16    | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
-  OUTPUT: ' '
-  Tick: 0094 | PC: 0x00000114 | store r3, 8(r2)      | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
-  Tick: 0097 | PC: 0x00000118 | alu_i r6, r6, 4      | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
-  Tick: 0100 | PC: 0x00000108 | branch r0, r0, -16   | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
-  Tick: 0104 | PC: 0x0000010C | load r3, 0(r6)       | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
-  Tick: 0107 | PC: 0x00000110 | branch r3, r0, 16    | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
-  OUTPUT: 'w'
-  Tick: 0110 | PC: 0x00000114 | store r3, 8(r2)      | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
-  Tick: 0113 | PC: 0x00000118 | alu_i r6, r6, 4      | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
-  Tick: 0116 | PC: 0x00000108 | branch r0, r0, -16   | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
-  Tick: 0120 | PC: 0x0000010C | load r3, 0(r6)       | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
-  Tick: 0123 | PC: 0x00000110 | branch r3, r0, 16    | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
-  OUTPUT: 'o'
-  Tick: 0126 | PC: 0x00000114 | store r3, 8(r2)      | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
-  Tick: 0129 | PC: 0x00000118 | alu_i r6, r6, 4      | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
-  Tick: 0132 | PC: 0x00000108 | branch r0, r0, -16   | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
-  Tick: 0136 | PC: 0x0000010C | load r3, 0(r6)       | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
-  Tick: 0139 | PC: 0x00000110 | branch r3, r0, 16    | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 0179 | PC: 0x00000114 | store r7, 8(r6)      | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  CACHE HIT  0x00000114
+  Tick: 0182 | PC: 0x00000118 | alu_i r10, r10, 4    | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+
+  ... [LOG TRUNCATED] ...
+
   OUTPUT: 'r'
-  Tick: 0142 | PC: 0x00000114 | store r3, 8(r2)      | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
-  Tick: 0145 | PC: 0x00000118 | alu_i r6, r6, 4      | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
-  Tick: 0148 | PC: 0x00000108 | branch r0, r0, -16   | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
-  Tick: 0152 | PC: 0x0000010C | load r3, 0(r6)       | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
-  Tick: 0155 | PC: 0x00000110 | branch r3, r0, 16    | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 0331 | PC: 0x00000114 | store r7, 8(r6)      | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  CACHE HIT  0x00000114
+  Tick: 0334 | PC: 0x00000118 | alu_i r10, r10, 4    | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  CACHE HIT  0x00000118
+  Tick: 0337 | PC: 0x00000108 | branch r0, r0, -16   | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+  CACHE HIT  0x00000108
+  CACHE MISS 0x00010024
+  Tick: 0350 | PC: 0x0000010C | load r7, 0(r10)      | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+  CACHE HIT  0x0000010C
+  Tick: 0353 | PC: 0x00000110 | branch r7, r0, 16    | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  CACHE HIT  0x00000110
   OUTPUT: 'l'
-  Tick: 0158 | PC: 0x00000114 | store r3, 8(r2)      | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
-  Tick: 0161 | PC: 0x00000118 | alu_i r6, r6, 4      | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
-  Tick: 0164 | PC: 0x00000108 | branch r0, r0, -16   | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
-  Tick: 0168 | PC: 0x0000010C | load r3, 0(r6)       | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
-  Tick: 0171 | PC: 0x00000110 | branch r3, r0, 16    | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 0356 | PC: 0x00000114 | store r7, 8(r6)      | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  CACHE HIT  0x00000114
+  Tick: 0359 | PC: 0x00000118 | alu_i r10, r10, 4    | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  CACHE HIT  0x00000118
+  Tick: 0362 | PC: 0x00000108 | branch r0, r0, -16   | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+  CACHE HIT  0x00000108
+  CACHE MISS 0x00010028
+  Tick: 0375 | PC: 0x0000010C | load r7, 0(r10)      | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+  CACHE HIT  0x0000010C
+  Tick: 0378 | PC: 0x00000110 | branch r7, r0, 16    | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  CACHE HIT  0x00000110
   OUTPUT: 'd'
-  Tick: 0174 | PC: 0x00000114 | store r3, 8(r2)      | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
-  Tick: 0177 | PC: 0x00000118 | alu_i r6, r6, 4      | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
-  Tick: 0180 | PC: 0x00000108 | branch r0, r0, -16   | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
-  Tick: 0184 | PC: 0x0000010C | load r3, 0(r6)       | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
-  Tick: 0187 | PC: 0x00000110 | branch r3, r0, 16    | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 0381 | PC: 0x00000114 | store r7, 8(r6)      | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  CACHE HIT  0x00000114
+  Tick: 0384 | PC: 0x00000118 | alu_i r10, r10, 4    | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  CACHE HIT  0x00000118
+  Tick: 0387 | PC: 0x00000108 | branch r0, r0, -16   | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+  CACHE HIT  0x00000108
+  CACHE MISS 0x0001002C
+  Tick: 0400 | PC: 0x0000010C | load r7, 0(r10)      | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+  CACHE HIT  0x0000010C
+  Tick: 0403 | PC: 0x00000110 | branch r7, r0, 16    | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  CACHE HIT  0x00000110
   OUTPUT: '
   '
-  Tick: 0190 | PC: 0x00000114 | store r3, 8(r2)      | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
-  Tick: 0193 | PC: 0x00000118 | alu_i r6, r6, 4      | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
-  Tick: 0196 | PC: 0x00000108 | branch r0, r0, -16   | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
-  Tick: 0200 | PC: 0x0000010C | load r3, 0(r6)       | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
-  Tick: 0203 | PC: 0x0000011C | branch r3, r0, 16    | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
-  Tick: 0205 | PC: 0x00000120 | halt                 | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+  Tick: 0406 | PC: 0x00000114 | store r7, 8(r6)      | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  CACHE HIT  0x00000114
+  Tick: 0409 | PC: 0x00000118 | alu_i r10, r10, 4    | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  CACHE HIT  0x00000118
+  Tick: 0412 | PC: 0x00000108 | branch r0, r0, -16   | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+  CACHE HIT  0x00000108
+  CACHE MISS 0x00010030
+  Tick: 0425 | PC: 0x0000010C | load r7, 0(r10)      | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+  CACHE HIT  0x0000010C
+  Tick: 0428 | PC: 0x0000011C | branch r7, r0, 16    | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+  CACHE MISS 0x0000011C
+  Tick: 0439 | PC: 0x00000120 | halt                 | t0: 0, t1: 1044480, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
 output: |+
   --- START SIMULATION ---
   --- END SIMULATION ---
-  Total ticks: 205
+  Total ticks: 439
+  Cache stats: 52 hits, 26 misses, 78 total, hit rate 66.7%
   OUTPUT BUFFER:
   hello world
 
@@ -170,14 +196,14 @@ machine_code: |
   000000F4 - 00000000 - nop
   000000F8 - 00000000 - nop
   000000FC - 00000000 - nop
-  00000100 - 15800010 - lui a0, 0x0010
-  00000104 - 148000FF - lui t1, 0x00FF
-  00000108 - 08D80000 - lw t2, 0(a0)
-  0000010C - 100C0010 - beq t2, zero, end
-  00000110 - 0C08C008 - sw t2, 8(t1)
-  00000114 - 05980004 - addi a0, a0, 4
-  00000118 - 13C007F0 - beq zero, zero, loop
-  0000011C - 20010000 - halt
+  00000100 - 15400010 - lui a0, 0x0010
+  00000104 - 14C000FF - lui t1, 0x00FF
+  00000108 - 08EA0000 - lw t2, 0(a0)
+  0000010C - 100E0010 - beq t2, zero, end
+  00000110 - 0C0C7008 - sw t2, 8(t1)
+  00000114 - 054A0004 - addi a0, a0, 4
+  00000118 - 13C001F0 - beq zero, zero, loop
+  0000011C - 20004000 - halt
 
   DATA SECTION
   00010000 - 00000068 - .string 'h'
