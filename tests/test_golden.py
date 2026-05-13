@@ -8,7 +8,7 @@ from io import StringIO
 
 import pytest
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from Machine.machine import main as machine_main
 from Translator.translator import main as asm_main
@@ -17,7 +17,7 @@ logging.getLogger().setLevel(logging.INFO)
 
 
 def truncate_log(log_text: str, max_lines: int = 100) -> str:
-    lines = log_text.strip().split('\n')
+    lines = log_text.strip().split("\n")
     if len(lines) <= max_lines:
         return log_text
     half = max_lines // 2

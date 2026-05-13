@@ -166,7 +166,7 @@ log: |-
   CACHE MISS 0x00000164
   Tick: 1777 | PC: 0x00000168 | alu_i r2, r2, 16     | t0: 0, t1: 0, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:0
   CACHE MISS 0x00000168
-  Tick: 1788 | PC: 0x0000010C | iret                 | t0: 0, t1: 0, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 1788 | PC: 0x0000010C | iret                 | t0: 0, t1: 0, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
   CACHE MISS 0x0000010C
   Tick: 1800 | PC: 0x00000104 | branch r0, r0, -8    | t0: 0, t1: 0, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
   CACHE MISS 0x00000104

@@ -15,20 +15,20 @@ logging.basicConfig(level=logging.INFO, format="%(message)s")
 
 
 def load_binary(filename, memory):
-    with open(filename, 'rb') as f:
-        magic = struct.unpack('>I', f.read(4))[0]
+    with open(filename, "rb") as f:
+        magic = struct.unpack(">I", f.read(4))[0]
         if magic != BinaryManager.MAGIC:
             raise ValueError("Invalid magic number in binary file!")
 
-        text_base = struct.unpack('>I', f.read(4))[0]
-        text_size = struct.unpack('>I', f.read(4))[0]
+        text_base = struct.unpack(">I", f.read(4))[0]
+        text_size = struct.unpack(">I", f.read(4))[0]
         for i in range(text_size):
-            memory.write(text_base + i * 4, struct.unpack('>i', f.read(4))[0])
+            memory.write(text_base + i * 4, struct.unpack(">i", f.read(4))[0])
 
-        data_base = struct.unpack('>I', f.read(4))[0]
-        data_size = struct.unpack('>I', f.read(4))[0]
+        data_base = struct.unpack(">I", f.read(4))[0]
+        data_size = struct.unpack(">I", f.read(4))[0]
         for i in range(data_size):
-            memory.write(data_base + i * 4, struct.unpack('>i', f.read(4))[0])
+            memory.write(data_base + i * 4, struct.unpack(">i", f.read(4))[0])
 
 
 def main():
@@ -41,7 +41,7 @@ def main():
 
     schedule = []
     if schedule_file and os.path.exists(schedule_file):
-        with open(schedule_file, 'r') as f:
+        with open(schedule_file, "r") as f:
             schedule = json.load(f)
 
     mem = Memory()
@@ -49,7 +49,7 @@ def main():
     dp = DataPath(mem)
     cu = ControlUnit(dp)
 
-    dp.write_reg(REGISTERS['sp'], 0x000F0000)
+    dp.write_reg(REGISTERS["sp"], 0x000F0000)
 
     print("--- START SIMULATION ---")
     cu.run(schedule)
@@ -61,5 +61,5 @@ def main():
     print(f"OUTPUT BUFFER:\n{output_str}")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

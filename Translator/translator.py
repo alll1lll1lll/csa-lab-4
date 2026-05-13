@@ -20,7 +20,7 @@ def main():
         print(f"Error: File '{args.source}' not found.")
         sys.exit(1)
 
-    with open(args.source, 'r', encoding='utf-8') as f:
+    with open(args.source, "r", encoding="utf-8") as f:
         source_code = f.read()
 
     try:
@@ -43,5 +43,6 @@ def main():
         print(f"Compilation Error:\n{e}")
         sys.exit(1)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()

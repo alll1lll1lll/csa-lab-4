@@ -44,7 +44,7 @@ log: |-
   CACHE MISS 0x00000118
   Tick: 0086 | PC: 0x0000011C | store r7, 16(r5)     | t0: 1044480, t1: 99, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:0
   CACHE MISS 0x0000011C
-  Tick: 0097 | PC: 0x00000100 | iret                 | t0: 1044480, t1: 99, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 0097 | PC: 0x00000100 | iret                 | t0: 1044480, t1: 99, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
   CACHE HIT  0x00000100
   Tick: 0100 | PC: 0x00000100 | branch r0, r0, 0     | t0: 1044480, t1: 99, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
   CACHE HIT  0x00000100
