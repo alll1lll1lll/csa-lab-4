@@ -19,27 +19,27 @@ source: |
 input_schedule: []
 log: |-
   CACHE MISS 0x00000100
-  Tick: 0011 | PC: 0x00000104 | lui r5, 1            | t0: 4096, t1: 0, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 0013 | PC: 0x00000104 | lui r5, 1            | t0: 4096, t1: 0, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
   CACHE MISS 0x00000104
-  Tick: 0023 | PC: 0x00000108 | alu_i r6, r0, -1     | t0: 4096, t1: 4294967295, sp: 0xF0000 | N:1 Z:0 V:0 C:0 IE:1
+  Tick: 0027 | PC: 0x00000108 | alu_i r6, r0, -1     | t0: 4096, t1: 4294967295, sp: 0xF0000 | N:1 Z:0 V:0 C:0 IE:1
   CACHE MISS 0x00000108
-  Tick: 0034 | PC: 0x0000010C | lui r7, 2            | t0: 4096, t1: 4294967295, sp: 0xF0000 | N:1 Z:0 V:0 C:0 IE:1
+  Tick: 0041 | PC: 0x0000010C | lui r7, 2            | t0: 4096, t1: 4294967295, sp: 0xF0000 | N:1 Z:0 V:0 C:0 IE:1
   CACHE MISS 0x0000010C
-  Tick: 0046 | PC: 0x00000110 | alu_i r28, r0, 2     | t0: 4096, t1: 4294967295, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 0055 | PC: 0x00000110 | alu_i r28, r0, 2     | t0: 4096, t1: 4294967295, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
   CACHE MISS 0x00000110
-  Tick: 0058 | PC: 0x00000114 | alu r8, r6, r28      | t0: 4096, t1: 4294967295, sp: 0xF0000 | N:0 Z:0 V:0 C:1 IE:1
+  Tick: 0069 | PC: 0x00000114 | alu r8, r6, r28      | t0: 4096, t1: 4294967295, sp: 0xF0000 | N:0 Z:0 V:0 C:1 IE:1
   CACHE MISS 0x00000114
-  Tick: 0070 | PC: 0x00000120 | branch r8, r6, 12    | t0: 4096, t1: 4294967295, sp: 0xF0000 | N:0 Z:0 V:0 C:1 IE:1
+  Tick: 0082 | PC: 0x00000120 | branch r8, r6, 12    | t0: 4096, t1: 4294967295, sp: 0xF0000 | N:0 Z:0 V:0 C:1 IE:1
   CACHE MISS 0x00000120
-  Tick: 0082 | PC: 0x00000124 | alu r9, r5, r7       | t0: 4096, t1: 4294967295, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 0096 | PC: 0x00000124 | alu r9, r5, r7       | t0: 4096, t1: 4294967295, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
   CACHE MISS 0x00000124
-  Tick: 0094 | PC: 0x00000128 | alu_i r9, r9, 1      | t0: 4096, t1: 4294967295, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 0110 | PC: 0x00000128 | alu_i r9, r9, 1      | t0: 4096, t1: 4294967295, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
   CACHE MISS 0x00000128
-  Tick: 0105 | PC: 0x0000012C | halt                 | t0: 4096, t1: 4294967295, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 0123 | PC: 0x0000012C | halt                 | t0: 4096, t1: 4294967295, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
 output: |+
   --- START SIMULATION ---
   --- END SIMULATION ---
-  Total ticks: 105
+  Total ticks: 124
   Cache stats: 0 hits, 9 misses, 9 total, hit rate 0.0%
   OUTPUT BUFFER:
 

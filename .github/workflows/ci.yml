@@ -19,7 +19,7 @@ jobs:
         run: ruff check .
 
       - name: Type check (mypy)
-        run: mypy Isa/ Translator/ Machine/ tests/
+        run: mypy --strict Isa/ Translator/ Machine/ tests/
 
       - name: Run golden tests
         run: pytest tests/ -v

@@ -52,7 +52,19 @@ def main():
     dp.write_reg(REGISTERS["sp"], 0x000F0000)
 
     print("--- START SIMULATION ---")
-    cu.run(schedule)
+    # if we want to stop at a target tick:
+    # TARGET=N
+    # while True:
+    #     is_running = cu.step(schedule)
+    #     if cu.ticks == TARGET:
+    #         cu.print_state("Breakpoint hit")
+    #         break
+    #     if not is_running:
+    #         break
+    while True:
+        is_running = cu.step(schedule)
+        if not is_running:
+            break
     print("--- END SIMULATION ---")
     print(f"Total ticks: {cu.ticks}")
     print(dp.cache.stats())

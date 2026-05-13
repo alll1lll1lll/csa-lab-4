@@ -115,108 +115,108 @@ input_schedule:
 
 log: |-
   CACHE MISS 0x00000100
-  Tick: 0011 | PC: 0x00000104 | lui r10, 16          | t0: 0, t1: 0, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 0013 | PC: 0x00000104 | lui r10, 16          | t0: 0, t1: 0, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
   CACHE MISS 0x00000104
-  Tick: 0022 | PC: 0x000001E4 | jal r1, 224          | t0: 0, t1: 0, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 0027 | PC: 0x000001E4 | jal r1, 224          | t0: 0, t1: 0, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
   CACHE MISS 0x000001E4
-  Tick: 0033 | PC: 0x000001E8 | lui r5, 255          | t0: 1044480, t1: 0, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 0041 | PC: 0x000001E8 | lui r5, 255          | t0: 1044480, t1: 0, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
   CACHE MISS 0x000001E8
   CACHE MISS 0x00010000
-  Tick: 0055 | PC: 0x000001EC | load r6, 0(r10)      | t0: 1044480, t1: 87, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 0066 | PC: 0x000001EC | load r6, 0(r10)      | t0: 1044480, t1: 87, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
   CACHE MISS 0x000001EC
-  Tick: 0067 | PC: 0x000001F0 | branch r6, r0, 16    | t0: 1044480, t1: 87, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 0079 | PC: 0x000001F0 | branch r6, r0, 16    | t0: 1044480, t1: 87, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
   CACHE MISS 0x000001F0
   OUTPUT: 'W'
-  Tick: 0079 | PC: 0x000001F4 | store r6, 8(r5)      | t0: 1044480, t1: 87, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 0093 | PC: 0x000001F4 | store r6, 8(r5)      | t0: 1044480, t1: 87, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
   CACHE MISS 0x000001F4
-  Tick: 0091 | PC: 0x000001F8 | alu_i r10, r10, 4    | t0: 1044480, t1: 87, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 0107 | PC: 0x000001F8 | alu_i r10, r10, 4    | t0: 1044480, t1: 87, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
   CACHE MISS 0x000001F8
-  Tick: 0103 | PC: 0x000001E8 | branch r0, r0, -16   | t0: 1044480, t1: 87, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+  Tick: 0120 | PC: 0x000001E8 | branch r0, r0, -16   | t0: 1044480, t1: 87, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
   CACHE HIT  0x000001E8
   CACHE MISS 0x00010004
-  Tick: 0116 | PC: 0x000001EC | load r6, 0(r10)      | t0: 1044480, t1: 104, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+  Tick: 0135 | PC: 0x000001EC | load r6, 0(r10)      | t0: 1044480, t1: 104, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
   CACHE HIT  0x000001EC
-  Tick: 0119 | PC: 0x000001F0 | branch r6, r0, 16    | t0: 1044480, t1: 104, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 0138 | PC: 0x000001F0 | branch r6, r0, 16    | t0: 1044480, t1: 104, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
   CACHE HIT  0x000001F0
   OUTPUT: 'h'
-  Tick: 0122 | PC: 0x000001F4 | store r6, 8(r5)      | t0: 1044480, t1: 104, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 0142 | PC: 0x000001F4 | store r6, 8(r5)      | t0: 1044480, t1: 104, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
   CACHE HIT  0x000001F4
-  Tick: 0125 | PC: 0x000001F8 | alu_i r10, r10, 4    | t0: 1044480, t1: 104, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 0146 | PC: 0x000001F8 | alu_i r10, r10, 4    | t0: 1044480, t1: 104, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
   CACHE HIT  0x000001F8
-  Tick: 0128 | PC: 0x000001E8 | branch r0, r0, -16   | t0: 1044480, t1: 104, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+  Tick: 0149 | PC: 0x000001E8 | branch r0, r0, -16   | t0: 1044480, t1: 104, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
   CACHE HIT  0x000001E8
   CACHE MISS 0x00010008
-  Tick: 0141 | PC: 0x000001EC | load r6, 0(r10)      | t0: 1044480, t1: 97, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+  Tick: 0164 | PC: 0x000001EC | load r6, 0(r10)      | t0: 1044480, t1: 97, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
   CACHE HIT  0x000001EC
-  Tick: 0144 | PC: 0x000001F0 | branch r6, r0, 16    | t0: 1044480, t1: 97, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 0167 | PC: 0x000001F0 | branch r6, r0, 16    | t0: 1044480, t1: 97, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
   CACHE HIT  0x000001F0
   OUTPUT: 'a'
-  Tick: 0147 | PC: 0x000001F4 | store r6, 8(r5)      | t0: 1044480, t1: 97, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 0171 | PC: 0x000001F4 | store r6, 8(r5)      | t0: 1044480, t1: 97, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
   CACHE HIT  0x000001F4
-  Tick: 0150 | PC: 0x000001F8 | alu_i r10, r10, 4    | t0: 1044480, t1: 97, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 0175 | PC: 0x000001F8 | alu_i r10, r10, 4    | t0: 1044480, t1: 97, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
   CACHE HIT  0x000001F8
-  Tick: 0153 | PC: 0x000001E8 | branch r0, r0, -16   | t0: 1044480, t1: 97, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+  Tick: 0178 | PC: 0x000001E8 | branch r0, r0, -16   | t0: 1044480, t1: 97, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
   CACHE HIT  0x000001E8
   CACHE MISS 0x0001000C
-  Tick: 0166 | PC: 0x000001EC | load r6, 0(r10)      | t0: 1044480, t1: 116, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+  Tick: 0193 | PC: 0x000001EC | load r6, 0(r10)      | t0: 1044480, t1: 116, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
   CACHE HIT  0x000001EC
-  Tick: 0169 | PC: 0x000001F0 | branch r6, r0, 16    | t0: 1044480, t1: 116, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 0196 | PC: 0x000001F0 | branch r6, r0, 16    | t0: 1044480, t1: 116, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
   CACHE HIT  0x000001F0
   OUTPUT: 't'
-  Tick: 0172 | PC: 0x000001F4 | store r6, 8(r5)      | t0: 1044480, t1: 116, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 0200 | PC: 0x000001F4 | store r6, 8(r5)      | t0: 1044480, t1: 116, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
 
   ... [LOG TRUNCATED] ...
 
-  Tick: 3846 | PC: 0x000001E8 | branch r0, r0, -16   | t0: 1044480, t1: 101, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+  Tick: 4398 | PC: 0x000001E8 | branch r0, r0, -16   | t0: 1044480, t1: 101, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
   CACHE HIT  0x000001E8
   CACHE MISS 0x00010098
-  Tick: 3859 | PC: 0x000001EC | load r6, 0(r10)      | t0: 1044480, t1: 0, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+  Tick: 4413 | PC: 0x000001EC | load r6, 0(r10)      | t0: 1044480, t1: 0, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
   CACHE HIT  0x000001EC
-  Tick: 3862 | PC: 0x000001FC | branch r6, r0, 16    | t0: 1044480, t1: 0, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+  Tick: 4416 | PC: 0x000001FC | branch r6, r0, 16    | t0: 1044480, t1: 0, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
   CACHE HIT  0x000001FC
-  Tick: 3864 | PC: 0x00000130 | jalr r0, r1, 0       | t0: 1044480, t1: 0, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+  Tick: 4420 | PC: 0x00000130 | jalr r0, r1, 0       | t0: 1044480, t1: 0, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
   CACHE MISS 0x00000130
-  Tick: 3875 | PC: 0x00000134 | lui r10, 16          | t0: 1044480, t1: 0, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+  Tick: 4434 | PC: 0x00000134 | lui r10, 16          | t0: 1044480, t1: 0, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
   CACHE MISS 0x00000134
-  Tick: 3887 | PC: 0x00000138 | alu_i r10, r10, 112  | t0: 1044480, t1: 0, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 4448 | PC: 0x00000138 | alu_i r10, r10, 112  | t0: 1044480, t1: 0, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
   CACHE MISS 0x00000138
-  Tick: 3898 | PC: 0x000001E4 | jal r1, 172          | t0: 1044480, t1: 0, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 4462 | PC: 0x000001E4 | jal r1, 172          | t0: 1044480, t1: 0, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
   CACHE HIT  0x000001E4
-  Tick: 3900 | PC: 0x000001E8 | lui r5, 255          | t0: 1044480, t1: 0, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 4466 | PC: 0x000001E8 | lui r5, 255          | t0: 1044480, t1: 0, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
   CACHE HIT  0x000001E8
   CACHE MISS 0x00010070
-  Tick: 3913 | PC: 0x000001EC | load r6, 0(r10)      | t0: 1044480, t1: 33, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 4481 | PC: 0x000001EC | load r6, 0(r10)      | t0: 1044480, t1: 33, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
   CACHE HIT  0x000001EC
-  Tick: 3916 | PC: 0x000001F0 | branch r6, r0, 16    | t0: 1044480, t1: 33, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 4484 | PC: 0x000001F0 | branch r6, r0, 16    | t0: 1044480, t1: 33, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
   CACHE MISS 0x000001F0
   OUTPUT: '!'
-  Tick: 3928 | PC: 0x000001F4 | store r6, 8(r5)      | t0: 1044480, t1: 33, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 4498 | PC: 0x000001F4 | store r6, 8(r5)      | t0: 1044480, t1: 33, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
   CACHE MISS 0x000001F4
-  Tick: 3940 | PC: 0x000001F8 | alu_i r10, r10, 4    | t0: 1044480, t1: 33, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 4512 | PC: 0x000001F8 | alu_i r10, r10, 4    | t0: 1044480, t1: 33, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
   CACHE MISS 0x000001F8
-  Tick: 3952 | PC: 0x000001E8 | branch r0, r0, -16   | t0: 1044480, t1: 33, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+  Tick: 4525 | PC: 0x000001E8 | branch r0, r0, -16   | t0: 1044480, t1: 33, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
   CACHE HIT  0x000001E8
   CACHE MISS 0x00010074
-  Tick: 3965 | PC: 0x000001EC | load r6, 0(r10)      | t0: 1044480, t1: 10, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+  Tick: 4540 | PC: 0x000001EC | load r6, 0(r10)      | t0: 1044480, t1: 10, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
   CACHE HIT  0x000001EC
-  Tick: 3968 | PC: 0x000001F0 | branch r6, r0, 16    | t0: 1044480, t1: 10, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 4543 | PC: 0x000001F0 | branch r6, r0, 16    | t0: 1044480, t1: 10, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
   CACHE HIT  0x000001F0
   OUTPUT: '
   '
-  Tick: 3971 | PC: 0x000001F4 | store r6, 8(r5)      | t0: 1044480, t1: 10, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 4547 | PC: 0x000001F4 | store r6, 8(r5)      | t0: 1044480, t1: 10, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
   CACHE MISS 0x000001F4
-  Tick: 3983 | PC: 0x000001F8 | alu_i r10, r10, 4    | t0: 1044480, t1: 10, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
+  Tick: 4561 | PC: 0x000001F8 | alu_i r10, r10, 4    | t0: 1044480, t1: 10, sp: 0xF0000 | N:0 Z:0 V:0 C:0 IE:1
   CACHE HIT  0x000001F8
-  Tick: 3986 | PC: 0x000001E8 | branch r0, r0, -16   | t0: 1044480, t1: 10, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+  Tick: 4564 | PC: 0x000001E8 | branch r0, r0, -16   | t0: 1044480, t1: 10, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
   CACHE HIT  0x000001E8
   CACHE MISS 0x00010078
-  Tick: 3999 | PC: 0x000001EC | load r6, 0(r10)      | t0: 1044480, t1: 0, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+  Tick: 4579 | PC: 0x000001EC | load r6, 0(r10)      | t0: 1044480, t1: 0, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
   CACHE HIT  0x000001EC
-  Tick: 4002 | PC: 0x000001FC | branch r6, r0, 16    | t0: 1044480, t1: 0, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+  Tick: 4582 | PC: 0x000001FC | branch r6, r0, 16    | t0: 1044480, t1: 0, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
   CACHE HIT  0x000001FC
-  Tick: 4004 | PC: 0x0000013C | jalr r0, r1, 0       | t0: 1044480, t1: 0, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+  Tick: 4586 | PC: 0x0000013C | jalr r0, r1, 0       | t0: 1044480, t1: 0, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
   CACHE MISS 0x0000013C
-  Tick: 4015 | PC: 0x00000140 | halt                 | t0: 1044480, t1: 0, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
+  Tick: 4599 | PC: 0x00000140 | halt                 | t0: 1044480, t1: 0, sp: 0xF0000 | N:0 Z:1 V:0 C:0 IE:1
 machine_code: |
   ADDRESS  - HEXCODE  - MNEMONIC
   --------------------------------
@@ -420,8 +420,8 @@ machine_code: |
 output: |+
   --- START SIMULATION ---
   --- END SIMULATION ---
-  Total ticks: 4015
-  Cache stats: 178 hits, 321 misses, 499 total, hit rate 35.7%
+  Total ticks: 4600
+  Cache stats: 189 hits, 310 misses, 499 total, hit rate 37.9%
   OUTPUT BUFFER:
   What is your name?
   Hello, Alice!
