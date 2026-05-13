@@ -1,5 +1,5 @@
 import logging
-
+from typing import Dict, List, Any
 HIT_TICKS = 1
 MISS_TICKS = 10
 
@@ -8,10 +8,10 @@ MMIO_BASE = 0x000FF000
 
 class Cache:
     def __init__(self, size: int = 16):
-        self.size = size
-        self.lines = [{"valid": False, "tag": -1, "data": 0} for _ in range(size)]
-        self.hits = 0
-        self.misses = 0
+        self.size: int = size
+        self.lines: List[Dict[str, Any]] = [{"valid": False, "tag": -1, "data": 0} for _ in range(size)]
+        self.hits: int = 0
+        self.misses: int = 0
 
     def _idx(self, address: int) -> int:
         return (address >> 2) % self.size
