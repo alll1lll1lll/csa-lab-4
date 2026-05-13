@@ -641,7 +641,7 @@ POP  t0    ; раскрывается в lw t0,0(sp) / addi sp,sp,4
 
 ### Схема DataPath
 
-![DataPath](docs/controlunit.png)
+![DataPath](docs/datapath.png)
 
 Процессор реализует классическую RISC-архитектуру с Load/Store доступом к памяти. Основные элементы:
 
@@ -695,7 +695,7 @@ Cache stats: 51 hits, 55 misses, 106 total, hit rate 48.1%
 
 ### Схема Control Unit (Hardwired)
 
-![Control Unit](docs/datapath.png)
+![Control Unit](docs/controlunit.png)
 
 Control Unit реализован как жёстко зашитый конечный автомат (`hw`). Каждый цикл инструкции разбивается на фиксированные фазы. Перед каждой выборкой инструкции CU проверяет условие `MMIO_IN_DATA не пуст && PS.IE` — при наступлении прерывания выполняется атомарная последовательность `TrapEnter` вместо Fetch.
 
