@@ -1,5 +1,6 @@
 import logging
 from enum import Enum, auto
+
 from Isa.isa import REGISTERS, Opcode
 
 _R_DISPATCH = {
