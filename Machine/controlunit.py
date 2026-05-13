@@ -1,9 +1,8 @@
 import logging
 from enum import Enum, auto
+from typing import Any, Dict
 
 from Isa.isa import REGISTERS, Opcode
-from typing import Dict, Any
-
 
 _R_DISPATCH = {
     (0, 0): (0, False),
@@ -46,15 +45,27 @@ class ControlUnit:
 
         # latches for data transfer between stages
         self.latch: Dict[str, Any] = {
-            "instr": 0, "pending_instr": 0,
-            "pc": 0, "opcode": 0,
-            "rd": 0, "rs1": 0, "rs2": 0,
-            "funct3": 0, "funct7": 0, "imm": 0,
-            "val1": 0, "val2": 0,
-            "alu_res": 0, "alu_flags": {},
-            "mem_addr": 0, "mem_data": 0, "pending_mem_data": 0,
-            "pending_trap_pc": 0, "trap_msg": "",
-            "mnemonic": "", "is_cmp": False
+            "instr": 0,
+            "pending_instr": 0,
+            "pc": 0,
+            "opcode": 0,
+            "rd": 0,
+            "rs1": 0,
+            "rs2": 0,
+            "funct3": 0,
+            "funct7": 0,
+            "imm": 0,
+            "val1": 0,
+            "val2": 0,
+            "alu_res": 0,
+            "alu_flags": {},
+            "mem_addr": 0,
+            "mem_data": 0,
+            "pending_mem_data": 0,
+            "pending_trap_pc": 0,
+            "trap_msg": "",
+            "mnemonic": "",
+            "is_cmp": False,
         }
 
     def decode_r_type(self, instr):

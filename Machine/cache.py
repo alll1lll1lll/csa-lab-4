@@ -1,5 +1,6 @@
 import logging
-from typing import Dict, List, Any
+from typing import Any, Dict, List
+
 HIT_TICKS = 1
 MISS_TICKS = 10
 
