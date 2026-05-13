@@ -1,8 +1,9 @@
 import logging
 from enum import Enum, auto
-from typing import Any, Dict
+from typing import Any, Dict, List, Optional, Tuple
 
 from Isa.isa import REGISTERS, Opcode
+from Machine.datapath import DataPath
 
 _R_DISPATCH = {
     (0, 0): (0, False),
@@ -37,13 +38,11 @@ class CpuState(Enum):
 
 
 class ControlUnit:
-    def __init__(self, datapath):
-        self.dp = datapath
-        self.ticks = 0
-        self.state = CpuState.FETCH
-        self.wait_ticks = 0
-
-        # latches for data transfer between stages
+    def __init__(self, datapath: DataPath) -> None:
+        self.dp: DataPath = datapath
+        self.ticks: int = 0
+        self.state: CpuState = CpuState.FETCH
+        self.wait_ticks: int = 0
         self.latch: Dict[str, Any] = {
             "instr": 0,
             "pending_instr": 0,
@@ -68,7 +67,7 @@ class ControlUnit:
             "is_cmp": False,
         }
 
-    def decode_r_type(self, instr):
+    def decode_r_type(self, instr: int) -> Tuple[int, int, int, int, int, int]:
         return (
             (instr >> 26) & 0x3F,
             (instr >> 21) & 0x1F,
@@ -78,10 +77,10 @@ class ControlUnit:
             instr & 0xFF,
         )
 
-    def decode_i_type(self, instr):
-        return (instr >> 26) & 0x3F, (instr >> 21) & 0x1F, (instr >> 16) & 0x1F, (instr >> 13) & 0x7, instr & 0x1FFF
+    def decode_i_type(self, instr: int) -> Tuple[int, int, int, int, int]:
+        return ((instr >> 26) & 0x3F, (instr >> 21) & 0x1F, (instr >> 16) & 0x1F, (instr >> 13) & 0x7, instr & 0x1FFF)
 
-    def decode_s_type(self, instr):
+    def decode_s_type(self, instr: int) -> Tuple[int, int, int, int, int]:
         return (
             (instr >> 26) & 0x3F,
             (instr >> 17) & 0x1F,
@@ -90,15 +89,15 @@ class ControlUnit:
             ((instr >> 22) & 0xF) << 9 | (instr & 0x1FF),
         )
 
-    def decode_u_type(self, instr):
-        return (instr >> 26) & 0x3F, (instr >> 21) & 0x1F, instr & 0x1FFFFF
+    def decode_u_type(self, instr: int) -> Tuple[int, int, int]:
+        return ((instr >> 26) & 0x3F, (instr >> 21) & 0x1F, instr & 0x1FFFFF)
 
-    def sign_extend(self, val, bits):
+    def sign_extend(self, val: int, bits: int) -> int:
         if val & (1 << (bits - 1)):
             return val - (1 << bits)
         return val
 
-    def print_state(self, message=""):
+    def print_state(self, message: str = "") -> None:
         ie = int(self.dp.ps_ie)
         logging.info(
             f"Tick: {self.ticks:04d} | PC: 0x{self.dp.pc:08X} | {message:20} | "
@@ -108,15 +107,14 @@ class ControlUnit:
             f"V:{self.dp.ps_flags['V']} C:{self.dp.ps_flags['C']} IE:{ie}"
         )
 
-    def handle_io(self, schedule):
+    def handle_io(self, schedule: List[Tuple[int, str]]) -> None:
         for sched_tick, char in schedule:
             if self.ticks == sched_tick:
                 self.dp.memory.input_char = ord(char)
 
-    def step(self, schedule=None):
+    def step(self, schedule: Optional[List[Tuple[int, str]]] = None) -> bool:
         if self.state == CpuState.HALTED:
             return False
-
         if schedule:
             self.handle_io(schedule)
 
@@ -375,7 +373,7 @@ class ControlUnit:
         self.ticks += 1
         return True
 
-    def run(self, schedule=None):
+    def run(self, schedule: Optional[List[Tuple[int, str]]] = None) -> None:
         if schedule is None:
             schedule = []
         while self.step(schedule):

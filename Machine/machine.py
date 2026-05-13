@@ -14,7 +14,7 @@ from Machine.memory import Memory
 logging.basicConfig(level=logging.INFO, format="%(message)s")
 
 
-def load_binary(filename, memory):
+def load_binary(filename: str, memory: Memory) -> None:
     with open(filename, "rb") as f:
         magic = struct.unpack(">I", f.read(4))[0]
         if magic != BinaryManager.MAGIC:
@@ -31,7 +31,7 @@ def load_binary(filename, memory):
             memory.write(data_base + i * 4, struct.unpack(">i", f.read(4))[0])
 
 
-def main():
+def main() -> None:
     if len(sys.argv) < 2:
         print("Usage: python machine.py <target.bin> [schedule.json]")
         sys.exit(1)

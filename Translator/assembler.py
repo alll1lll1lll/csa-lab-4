@@ -1,4 +1,5 @@
 import re
+from typing import Dict, List, Tuple
 
 from Translator.codegen import CodeGenerator
 from Translator.utils import parse_int
@@ -8,14 +9,14 @@ DATA_START = 0x10000
 
 
 class Assembler:
-    def __init__(self):
-        self.labels = {}
-        self.text_section = []
-        self.data_section = []
-        self.pc = TEXT_START
-        self.dc = DATA_START
-        self.current_section = ".text"
-        self.lines_info = []
+    def __init__(self) -> None:
+        self.labels: Dict[str, int] = {}
+        self.text_section: List[Tuple[int, int, str]] = []
+        self.data_section: List[Tuple[int, int, str]] = []
+        self.pc: int = 0
+        self.dc: int = 0x10000
+        self.current_section: str = ".text"
+        self.lines_info: List[Tuple[str, str, str]] = []
 
     def resolve_imm(self, imm_str: str, current_pc: int, is_relative: bool = False) -> int:
         # %hi(sym) → upper bits of address (sym >> 12)
@@ -37,7 +38,7 @@ class Assembler:
             return (target - current_pc) if is_relative else target
         return parse_int(imm_str)
 
-    def pass_1(self, source_code: str):
+    def pass_1(self, source_code: str) -> None:
         for line in source_code.splitlines():
             original_line = line
             line = line.split(";")[0].strip()
@@ -91,7 +92,7 @@ class Assembler:
             elif self.current_section == ".text":
                 self.pc += 4
 
-    def pass_2(self):
+    def pass_2(self) -> None:
         self.pc = TEXT_START
         self.dc = DATA_START
 
@@ -116,12 +117,16 @@ class Assembler:
                         self.data_section.append((self.dc, val, f".word {val}"))
                         self.dc += 4
                 elif line.startswith(".string"):
-                    str_val = re.search(r'"(.*)"', line).group(1).encode("utf-8").decode("unicode_escape")
-                    for char in str_val:
-                        self.data_section.append((self.dc, ord(char), f".string '{char}'"))
+                    match = re.search(r'"(.*)"', line)
+                    if match:
+                        str_val = match.group(1).encode("utf-8").decode("unicode_escape")
+                        for char in str_val:
+                            self.data_section.append((self.dc, ord(char), f".string '{char}'"))
+                            self.dc += 4
+                        self.data_section.append((self.dc, 0, ".string '\\0'"))
                         self.dc += 4
-                    self.data_section.append((self.dc, 0, ".string '\\0'"))
-                    self.dc += 4
+                    else:
+                        raise ValueError(f"Malformed string directive at line: {line}")
 
             elif section == ".text":
                 if line.startswith(".word"):

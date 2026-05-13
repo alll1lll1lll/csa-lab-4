@@ -9,7 +9,7 @@ from Translator.assembler import Assembler
 from Translator.preprocessor import Preprocessor
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(description="RISC Assembler")
     parser.add_argument("source", help="Source assembly file (.asm)")
     parser.add_argument("binary", help="Output binary file (.bin)")

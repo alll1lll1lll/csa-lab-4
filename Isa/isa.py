@@ -1,7 +1,8 @@
 import struct
 from enum import Enum
+from typing import Dict, List, Tuple
 
-REGISTERS = {
+REGISTERS: Dict[str, int] = {
     # x-notation
     "x0": 0,
     "x1": 1,
@@ -86,8 +87,7 @@ class Opcode(int, Enum):
 
 class InstructionEncoder:
     @staticmethod
-    def encode_r(opcode, rd, rs1, rs2, funct3, funct7):
-        # [opcode:6][rd:5][rs1:5][rs2:5][funct3:3][funct7:8]
+    def encode_r(opcode: int, rd: int, rs1: int, rs2: int, funct3: int, funct7: int) -> int:
         return (
             ((opcode & 0x3F) << 26)
             | ((rd & 0x1F) << 21)
@@ -98,8 +98,7 @@ class InstructionEncoder:
         )
 
     @staticmethod
-    def encode_i(opcode, rd, rs1, imm, funct3):
-        # [opcode:6][rd:5][rs1:5][funct3:3][imm:13]
+    def encode_i(opcode: int, rd: int, rs1: int, imm: int, funct3: int) -> int:
         return (
             ((opcode & 0x3F) << 26)
             | ((rd & 0x1F) << 21)
@@ -109,8 +108,7 @@ class InstructionEncoder:
         )
 
     @staticmethod
-    def encode_s(opcode, rs1, rs2, imm, funct3):
-        # [opcode:6][imm[12:9]:4][rs1:5][rs2:5][funct3:3][imm[8:0]:9]
+    def encode_s(opcode: int, rs1: int, rs2: int, imm: int, funct3: int) -> int:
         imm = imm & 0x1FFF
         return (
             ((opcode & 0x3F) << 26)
@@ -122,31 +120,32 @@ class InstructionEncoder:
         )
 
     @staticmethod
-    def encode_u(opcode, rd, imm):
-        # [opcode:6][rd:5][imm:21]
+    def encode_u(opcode: int, rd: int, imm: int) -> int:
         return ((opcode & 0x3F) << 26) | ((rd & 0x1F) << 21) | (imm & 0x1FFFFF)
 
 
 class BinaryManager:
-    MAGIC = 0xDEADBEEF
+    MAGIC: int = 0xDEADBEEF
 
     @staticmethod
-    def write_binary(filename, text_section, data_section):
+    def write_binary(
+        filename: str, text_section: List[Tuple[int, int, str]], data_section: List[Tuple[int, int, str]]
+    ) -> None:
         with open(filename, "wb") as f:
             f.write(struct.pack(">I", BinaryManager.MAGIC))
-
             f.write(struct.pack(">I", 0x0000))
             f.write(struct.pack(">I", len(text_section)))
             for _, word, _ in text_section:
                 f.write(struct.pack(">i", word))
-
             f.write(struct.pack(">I", 0x10000))
             f.write(struct.pack(">I", len(data_section)))
             for _, word, _ in data_section:
                 f.write(struct.pack(">i", word))
 
     @staticmethod
-    def write_debug(filename, text_section, data_section):
+    def write_debug(
+        filename: str, text_section: List[Tuple[int, int, str]], data_section: List[Tuple[int, int, str]]
+    ) -> None:
         with open(filename, "w", encoding="utf-8") as f:
             f.write("ADDRESS  - HEXCODE  - MNEMONIC\n")
             f.write("-" * 32 + "\n")

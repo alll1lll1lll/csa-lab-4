@@ -2,7 +2,7 @@ import re
 
 
 class Preprocessor:
-    def __init__(self):
+    def __init__(self) -> None:
         self.defines: dict[str, str] = {}
         self.macros: dict[str, tuple[list[str], list[str]]] = {}
 

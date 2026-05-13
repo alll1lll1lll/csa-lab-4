@@ -1,4 +1,5 @@
 import logging
+from typing import Dict, List, Optional
 
 MMIO_BASE = 0x000FF000
 MMIO_IN_STATUS = MMIO_BASE + 0x00
@@ -9,13 +10,13 @@ MMIO_IRQ_ACK = MMIO_BASE + 0x10
 
 
 class Memory:
-    def __init__(self):
-        self.memory = {}
-        self.input_char = None  # single-slot HW register; new char overwrites unread data
-        self.eof = False
-        self.output_buffer = []
+    def __init__(self) -> None:
+        self.memory: Dict[int, int] = {}
+        self.output_buffer: List[str] = []
+        self.input_char: Optional[int] = None
+        self.eof: bool = False
 
-    def read(self, address):
+    def read(self, address: int) -> int:
         if address % 4 != 0:
             raise ValueError(f"Unaligned memory read at 0x{address:08X}")
         if address == MMIO_IN_STATUS:
@@ -29,7 +30,7 @@ class Memory:
             return 1
         return self.memory.get(address, 0)
 
-    def write(self, address, value):
+    def write(self, address: int, value: int) -> None:
         if address % 4 != 0:
             raise ValueError(f"Unaligned memory write at 0x{address:08X}")
         if address == MMIO_OUT_DATA:

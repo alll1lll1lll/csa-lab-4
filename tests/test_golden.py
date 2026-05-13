@@ -5,6 +5,7 @@ import sys
 import tempfile
 from contextlib import redirect_stdout
 from io import StringIO
+from typing import Any
 
 import pytest
 
@@ -26,7 +27,7 @@ def truncate_log(log_text: str, max_lines: int = 100) -> str:
 
 
 @pytest.mark.golden_test("../golden/*.yml")
-def test_programs(golden, caplog, monkeypatch):
+def test_programs(golden: Any, caplog: pytest.LogCaptureFixture, monkeypatch: pytest.MonkeyPatch) -> None:
     with tempfile.TemporaryDirectory() as tmpdir:
         source_path = os.path.join(tmpdir, "source.asm")
         binary_path = os.path.join(tmpdir, "out.bin")
